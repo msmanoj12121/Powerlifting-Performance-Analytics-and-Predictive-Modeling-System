@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicted Winners (2026)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('lifting3.gif') no-repeat center center/cover;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+        h1 {
+            color: #ffcc00;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .winner-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .winner-card {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            width: 250px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .winner-card:hover {
+            transform: scale(1.1);
+        }
+        .winner-card h2 {
+            font-size: 22px;
+        }
+        .winner-card p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .gold { color: #ffd700; }
+        .silver { color: #c0c0c0; }
+        .bronze { color: #cd7f32; }
+        .trophy {
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏆 Predicted Winners for 2026</h1>
+    <div class="winner-container">
+        {% for winner in winners %}
+        <div class="winner-card {% if loop.index == 1 %}gold{% elif loop.index == 2 %}silver{% elif loop.index == 3 %}bronze{% endif %}">
+            <div class="trophy">{% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% endif %}</div>
+            <h2>{{ winner["Name"] }}</h2>
+            <p><strong>Predicted Wilks Score:</strong> {{ "%.2f"|format(winner["Predicted_Wilks_2026"]) }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📅 Top Players by Year</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: url('https://source.unsplash.com/1600x900/?weightlifting,gold-medal') no-repeat center center/cover;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        h1 {
+            color: #ffcc00;
+            font-size: 42px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        table {
+            width: 70%;
+            margin: auto;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #d9534f;
+            color: white;
+            font-size: 20px;
+        }
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .btn {
+            background-color: #d9534f;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #c9302c;
+        }
+        select {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            background: #333;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>📅 Top Players by Year</h1>
+    
+    <form action="/top_players" method="GET">
+        <label for="year">Choose a Year:</label>
+        <select name="year" id="year" required>
+            {% for year in years %}
+                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>🏆 {{ year }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">🔍 Show Players</button>
+    </form>
+    
+    {% if players %}
+        <h2>Top Players in {{ selected_year }}</h2>
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Wilks Score</th>
+                <th>Total Lifted</th>
+                <th>Association</th>
+            </tr>
+            {% for player in players %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ player["Name"] }}</td>
+                <td>{{ player["Weight_Class"] }}</td>
+                <td>{{ "%.2f"|format(player["Wilks_Score"]) }}</td>
+                <td>{{ player["Total_Lift"] }}</td>
+                <td>{{ player.get("Federation", "N/A") }}</td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    <br>
+    <a href="/" class="btn">🏠 Back to Home</a>
+</body>
+</html>
