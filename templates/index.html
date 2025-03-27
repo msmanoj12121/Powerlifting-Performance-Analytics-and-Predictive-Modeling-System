@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Powerlifting Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url('lifting.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        .container {
+            background-color: rgba(18, 18, 18, 0.7); /* Slightly transparent background to make text readable */
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h2 {
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <!-- Section for Navigation Buttons -->
+        <h2 class="text-center mb-4">🏆 Powerlifting Analysis</h2>
+
+        <div class="d-flex justify-content-around mb-4">
+            <button class="btn btn-danger" onclick="searchPlayer()">Search Lifter</button>
+            <a href="/best_lifters" class="btn btn-primary">Top 3 Lifters</a>
+            <a href="/predict_winner" class="btn btn-success">Predict Future Winner</a>
+            <a href="/top_players" class="btn btn-warning">Top Winners by Year</a>
+        </div>
+    </div>
+
+    <script>
+        function searchPlayer() {
+            let input = prompt("Enter lifter's name:").trim();
+            if (input.length === 0) {
+                alert("Please enter a player's name!");
+                return;
+            }
+            window.location.href = `/analyze_lifter/${encodeURIComponent(input)}`;
+        }
+    </script>
+
+</body>
+</html>

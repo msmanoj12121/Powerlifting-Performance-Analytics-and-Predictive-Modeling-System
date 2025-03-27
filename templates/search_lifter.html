@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Lifter</title>
+    
+    <style>
+    .suggestions {
+        position: absolute;
+        background: white;
+        color: black;
+        border: 1px solid #ddd;
+        max-height: 150px;
+        overflow-y: auto;
+        width: 200px;
+        display: none;
+    }
+    
+    .suggestion-item {
+        padding: 5px;
+        cursor: pointer;
+    }
+    
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
+    </style>
+</head>
+<body>
+    <h1>🔍 Search for a Lifter</h1>
+    <input type="text" id="searchInput" placeholder="Type lifter name..." onkeyup="fetchSuggestions()">
+    <button onclick="searchPlayer()">Search</button>
+    <div id="suggestionsBox" class="suggestions"></div>
+
+<script>
+    function fetchSuggestions() {
+        let input = document.getElementById("searchInput").value.trim();
+        let suggestionsBox = document.getElementById("suggestionsBox");
+
+        if (input.length === 0) {
+            suggestionsBox.style.display = "none";
+            return;
+        }
+
+        fetch(`/search_suggestions?q=${encodeURIComponent(input)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Received suggestions:", data);  // ✅ Debugging Log
+                
+                if (data.length === 0) {
+                    suggestionsBox.style.display = "none";
+                    return;
+                }
+
+                let suggestionsHTML = data.map(name => 
+                    `<div class="suggestion-item" onclick="selectName('${name}')">${name}</div>`
+                ).join("");
+
+                suggestionsBox.innerHTML = suggestionsHTML;
+                suggestionsBox.style.display = "block";
+            })
+            .catch(error => console.error("Error fetching suggestions:", error));
+    }
+
+    function selectName(name) {
+        document.getElementById("searchInput").value = name;
+        document.getElementById("suggestionsBox").style.display = "none";
+        window.location.href = `/analyze_lifter/${encodeURIComponent(name)}`;
+    }
+
+    function searchPlayer() {
+        let input = document.getElementById("searchInput").value.trim();
+        if (input.length === 0) {
+            alert("Please enter a lifter's name!");
+            return;
+        }
+
+        fetch(`/search_lifter?query=${encodeURIComponent(input)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else if (data.length > 0) {
+                    window.location.href = `/analyze_lifter/${encodeURIComponent(data[0])}`;
+                } else {
+                    alert("Lifter not found!");
+                }
+            })
+            .catch(error => console.error("Error searching player:", error));
+    }
+</script>
+</body>
+</html>
